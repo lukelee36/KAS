@@ -80,15 +80,26 @@ int main()
 {
 	node_t * frequencisData = malloc(sizeof(node_t));
 
+	char dataString[16] = {'A', ' ', 'D', 'E', 'A', 'D', ' ', 'D', 'A', 'D', ' ', 'C', 'E', 'D', 'E', 'D'};
+
+	int j;
+
 	frequencisData->val = 0;
 	frequencisData->c = ' ';
 	frequencisData->left = NULL;
 	frequencisData->right = NULL;
 
-	insert(frequencisData,5);
-	insert(frequencisData,8);
-	insert(frequencisData,4);
-	insert(frequencisData,3);
+	for (j = 0; j < sizeof(dataString); ++j) {
+		insert(frequencisData, dataString[j]);
+	}
+//	insert(frequencisData,5);
+//	insert(frequencisData,8);
+//	insert(frequencisData,4);
+//	insert(frequencisData,3);
+//	insert(frequencisData,'G');
+//	insert(frequencisData,20);
+//	insert(frequencisData,3);
+//	insert(frequencisData,100);
 
 	printDFS(frequencisData);
 	printf("\n");
