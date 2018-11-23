@@ -11,46 +11,87 @@
 #include <stdarg.h>
 
 //	This structure is for struct array
-struct pole
+typedef struct node
 {
 	char c;
-	int value;
-};
+	int val;
+	struct node * left;
+	struct node * right;
+}node_t;
 
-struct pole freqString(void *data[])
+void insert(node_t * tree, int val)
 {
-	struct pole frequencisData[];
-	int i,j;
+  if (tree->val == 0)
+  {
+    /* insert on current (empty) position */
+    tree->val=val;
+  }
+  else
+  {
+    if (val < tree->val)
+    {
+      /* insert left */
+      if (tree->left != NULL)
+      {
+        insert(tree->left, val);
+      }
+      else
+      {
+        tree->left = malloc(sizeof(node_t));
+        /* set values explicitly, alternative would be calloc() */
+        tree->left->val = val;
+        tree->left->left = NULL;
+        tree->left->right = NULL;
+      }
+    }
+    else
+    {
+      if (val >= tree->val)
+      {
+        /* insert right */
+        if (tree->right != NULL)
+        {
+          insert(tree->right,val);
+        }
+        else
+        {
+          tree->right=malloc(sizeof(node_t));
+          /* set values explicitly, alternative would be calloc() */
+          tree->right->val=val;
+          tree->right->left = NULL;
+          tree->right->right = NULL;
+        }
+      }
+    }
+  }
+}
 
-	for (i = 0; i < sizeof(data); ++i)
-	{
-		for (j = 0; j < sizeof(frequencisData); ++j)
-		{
-			//	TODO v pøípadì že se data rovnaji pøipíše se k value jednièka, pokud ne, tak se vytvoøí nový znak v poli struktur
-			if (data[i] == frequencisData[j])
-			{
-				frequencisData[j].value++;
-				break;
-			}
-			else
-			{
-
-			}
-		}
-		frequencisData[var].c = data[var];
-		frequencisData[var].value++;
-	}
-	return frequencisData;
+/* depth-first search */
+void printDFS(node_t * current)
+{
+  /* change the code here */
+  if (current == NULL)         return;   /* security measure */
+  if (current->left != NULL)   printDFS(current->left);
+  if (current != NULL)         printf("%d ", current->val);
+  if (current->right != NULL)  printDFS(current->right);
 }
 
 int main()
 {
-	char myDataString[7] = {'a' , 'b', 'c', 'e', 'w', 'e', '\0'};
+	node_t * frequencisData = malloc(sizeof(node_t));
 
-	for (int var = 0;  var < sizeof(myDataString); ++var) {
-		printf();
-	}
-//	printf("Hello World");
+	frequencisData->val = 0;
+	frequencisData->c = ' ';
+	frequencisData->left = NULL;
+	frequencisData->right = NULL;
+
+	insert(frequencisData,5);
+	insert(frequencisData,8);
+	insert(frequencisData,4);
+	insert(frequencisData,3);
+
+	printDFS(frequencisData);
+	printf("\n");
 	return 0;
 }
 
