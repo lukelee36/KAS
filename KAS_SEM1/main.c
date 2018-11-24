@@ -10,54 +10,54 @@
 #include <string.h>
 #include <stdarg.h>
 
-//	This structure is for struct array
-typedef struct node
+//	Huffman Tree
+typedef struct huff_node
 {
 	char c;
-	int val;
-	struct node * left;
-	struct node * right;
+	unsigned freq;
+	struct huff_node * left;
+	struct huff_node * right;
 }node_t;
 
-void insert(node_t * tree, int val)
+void insert(node_t * tree, unsigned freq)
 {
-  if (tree->val == 0)
+  if (tree->freq == 0)
   {
     /* insert on current (empty) position */
-    tree->val=val;
+    tree->freq=freq;
   }
   else
   {
-    if (val < tree->val)
+    if (freq < tree->freq)
     {
       /* insert left */
       if (tree->left != NULL)
       {
-        insert(tree->left, val);
+        insert(tree->left, freq);
       }
       else
       {
         tree->left = malloc(sizeof(node_t));
-        /* set values explicitly, alternative would be calloc() */
-        tree->left->val = val;
+        /* set freques explicitly, alternative would be calloc() */
+        tree->left->freq = freq;
         tree->left->left = NULL;
         tree->left->right = NULL;
       }
     }
     else
     {
-      if (val >= tree->val)
+      if (freq >= tree->freq)
       {
         /* insert right */
         if (tree->right != NULL)
         {
-          insert(tree->right,val);
+          insert(tree->right,freq);
         }
         else
         {
           tree->right=malloc(sizeof(node_t));
-          /* set values explicitly, alternative would be calloc() */
-          tree->right->val=val;
+          /* set freques explicitly, alternative would be calloc() */
+          tree->right->freq=freq;
           tree->right->left = NULL;
           tree->right->right = NULL;
         }
@@ -72,7 +72,7 @@ void printDFS(node_t * current)
   /* change the code here */
   if (current == NULL)         return;   /* security measure */
   if (current->left != NULL)   printDFS(current->left);
-  if (current != NULL)         printf("%d ", current->val);
+  if (current != NULL)         printf("%d ", current->freq);
   if (current->right != NULL)  printDFS(current->right);
 }
 
@@ -80,17 +80,23 @@ int main()
 {
 	node_t * frequencisData = malloc(sizeof(node_t));
 
-	char dataString[16] = {'A', ' ', 'D', 'E', 'A', 'D', ' ', 'D', 'A', 'D', ' ', 'C', 'E', 'D', 'E', 'D'};
+	char dataString[16] = {'A', ' ', 'D', 'E', 'A', 'D', ' ', 'D', 'A', 'D', '¤', 'C', 'E', 'D', 'E', 'D'};
 
 	int j;
 
-	frequencisData->val = 0;
+	frequencisData->freq = 0;
 	frequencisData->c = ' ';
 	frequencisData->left = NULL;
 	frequencisData->right = NULL;
 
 	for (j = 0; j < sizeof(dataString); ++j) {
-		insert(frequencisData, dataString[j]);
+		if (dataString[j]<=127) {
+			insert(frequencisData, dataString[j]);
+		}
+		else
+		{
+			insert(frequencisData, '_');
+		}
 	}
 //	insert(frequencisData,5);
 //	insert(frequencisData,8);
