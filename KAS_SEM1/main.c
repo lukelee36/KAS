@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include "pokus.h"
 
 //	Huffman Tree
 typedef struct huff_node
@@ -107,8 +108,10 @@ int main()
 //	insert(frequencisData,3);
 //	insert(frequencisData,100);
 
-	printDFS(frequencisData);
+	//printDFS(frequencisData);
 	printf("\n");
+
+	pokus();
 	return 0;
 }
 
