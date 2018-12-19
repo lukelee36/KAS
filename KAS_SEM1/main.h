@@ -8,7 +8,11 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
+#include <stdio.h>
+
 //	funkce pro ohodnoceni stringu
-int freqString(void *data[]);
+void setFrequency(int array, size_t array_size);
+//int freqString(void *data[]);
+
 
 #endif /* MAIN_H_ */

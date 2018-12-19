@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-#include "pokus.h"
+#include "Library/heapSort.h"
 
 //	Huffman Tree
 typedef struct huff_node
@@ -20,98 +20,68 @@ typedef struct huff_node
 	struct huff_node * right;
 }node_t;
 
-void insert(node_t * tree, unsigned freq)
+typedef struct duoArray
 {
-  if (tree->freq == 0)
-  {
-    /* insert on current (empty) position */
-    tree->freq=freq;
-  }
-  else
-  {
-    if (freq < tree->freq)
-    {
-      /* insert left */
-      if (tree->left != NULL)
-      {
-        insert(tree->left, freq);
-      }
-      else
-      {
-        tree->left = malloc(sizeof(node_t));
-        /* set freques explicitly, alternative would be calloc() */
-        tree->left->freq = freq;
-        tree->left->left = NULL;
-        tree->left->right = NULL;
-      }
-    }
-    else
-    {
-      if (freq >= tree->freq)
-      {
-        /* insert right */
-        if (tree->right != NULL)
-        {
-          insert(tree->right,freq);
-        }
-        else
-        {
-          tree->right=malloc(sizeof(node_t));
-          /* set freques explicitly, alternative would be calloc() */
-          tree->right->freq=freq;
-          tree->right->left = NULL;
-          tree->right->right = NULL;
-        }
-      }
-    }
-  }
-}
+	char c;
+	unsigned freq;
+	struct duoArray * next;
+}arr_t;
 
-/* depth-first search */
-void printDFS(node_t * current)
+void setFrequency(int array, size_t array_size)
 {
-  /* change the code here */
-  if (current == NULL)         return;   /* security measure */
-  if (current->left != NULL)   printDFS(current->left);
-  if (current != NULL)         printf("%d ", current->freq);
-  if (current->right != NULL)  printDFS(current->right);
+	arr_t * frequencisData = malloc(sizeof(arr_t));
+	int *c = array;
+	int f = 0;
+
+	for (int i; i < array_size; i++)
+	{
+		for (int j; j < array_size; j++)
+		{
+//			FIXME najit korektni zapis pro porovnani pointeru a prvku z pole.
+			if (*c == array[j])
+			{
+				f++;
+			}
+		}
+		frequencisData->c = c;
+		frequencisData->freq = f;
+		i += f;
+		f = 0;
+		frequencisData = frequencisData->next;
+	}
+
+
+//
+//	for (j = 0; j < sizeof(dataString); ++j) {
+//			if (dataString[j]<=127) {
+//				insert(frequencisData, dataString[j]);
+//			}
+//			else
+//			{
+//				insert(frequencisData, '_');
+//			}
+//		}
 }
 
 int main()
 {
-	node_t * frequencisData = malloc(sizeof(node_t));
+	// Kódováný øetìzec
+	int dataString[46] = {'A', ' ', 'D', 'E', 'A', 'D', ' ', 'D', 'A', 'D', ' ', 'C', 'E', 'D', 'E', 'D',' ','A',' ','B','A','D',' ','B','A','B','E',' ','A',' ','B','E','A','D','E','D',' ','A','B','A','C','A',' ','B','E','D'};
+//	int array[6] = {10, 5, 8, 6, 12, 0};
+	size_t n = sizeof(dataString)/sizeof(dataString[0]);
 
-	char dataString[46] = {'A', ' ', 'D', 'E', 'A', 'D', ' ', 'D', 'A', 'D', ' ', 'C', 'E', 'D', 'E', 'D',' ','A',' ','B','A','D',' ','B','A','B','E',' ','A',' ','B','E','A','D','E','D',' ','A','B','A','C','A',' ','B','E','D'};
+	// Napøed øetìzec rozdìlíme na znaky a jejich èetnost, potom je seøadíme
+	// Co je to MinHeap ?
+	printf("KAS Semestralni prace 1: Huffman Tree\n");
 
-	int j;
+	// Fukce na vypsani pole a serazeni pole od nejmensiho po nejvetsi
+	printArray(dataString, n);
+	heapSort(dataString,n);
+	printArray(dataString, n);
 
-	frequencisData->freq = 0;
-	frequencisData->c = ' ';
-	frequencisData->left = NULL;
-	frequencisData->right = NULL;
+	//do struktury zapiseme pocty jednotlivych cisel
+	setFrequency(dataString,n);
 
-	for (j = 0; j < sizeof(dataString); ++j) {
-		if (dataString[j]<=127) {
-			insert(frequencisData, dataString[j]);
-		}
-		else
-		{
-			insert(frequencisData, '_');
-		}
-	}
-//	insert(frequencisData,5);
-//	insert(frequencisData,8);
-//	insert(frequencisData,4);
-//	insert(frequencisData,3);
-//	insert(frequencisData,'G');
-//	insert(frequencisData,20);
-//	insert(frequencisData,3);
-//	insert(frequencisData,100);
-
-	//printDFS(frequencisData);
-	printf("\n");
-
-	pokus();
 	return 0;
 }
 
