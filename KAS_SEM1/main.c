@@ -22,32 +22,58 @@ typedef struct huff_node
 
 typedef struct duoArray
 {
-	char c;
+	int c;
 	unsigned freq;
 	struct duoArray * next;
 }arr_t;
 
-void setFrequency(int array, size_t array_size)
+arr_t *setArr(int c, unsigned freq)
 {
 	arr_t * frequencisData = malloc(sizeof(arr_t));
-	int *c = array;
+
+	if(frequencisData)
+	{
+		frequencisData->c = c;
+		frequencisData->freq = freq;
+		frequencisData->next = NULL;
+	}
+	return frequencisData;
+}
+
+void setFrequency(int array[], int array_size)
+{
+	int *p_i = array;
+	//int *p_j = array;
+	int c;
 	int f = 0;
 
 	for (int i; i < array_size; i++)
 	{
-		for (int j; j < array_size; j++)
-		{
+		for (int var = 0; var < array_size; ++var) {
+			c = array[var];
 //			FIXME najit korektni zapis pro porovnani pointeru a prvku z pole.
-			if (*c == array[j])
+			if (c == *p_i )
 			{
 				f++;
 			}
 		}
-		frequencisData->c = c;
-		frequencisData->freq = f;
-		i += f;
-		f = 0;
+		setArr(c, f);
+
 		frequencisData = frequencisData->next;
+
+		if (frequencisData != NULL)
+		{
+			frequencisData->c = *p_i;
+			frequencisData->freq = f;
+		}
+		else
+		{
+			setArr(c, f);
+		}
+
+		i = f;
+		f = 0;
+		*p_i = array[i];
 	}
 
 
@@ -68,7 +94,7 @@ int main()
 	// Kódováný øetìzec
 	int dataString[46] = {'A', ' ', 'D', 'E', 'A', 'D', ' ', 'D', 'A', 'D', ' ', 'C', 'E', 'D', 'E', 'D',' ','A',' ','B','A','D',' ','B','A','B','E',' ','A',' ','B','E','A','D','E','D',' ','A','B','A','C','A',' ','B','E','D'};
 //	int array[6] = {10, 5, 8, 6, 12, 0};
-	size_t n = sizeof(dataString)/sizeof(dataString[0]);
+	int n = sizeof(dataString)/sizeof(dataString[0]);
 
 	// Napøed øetìzec rozdìlíme na znaky a jejich èetnost, potom je seøadíme
 	// Co je to MinHeap ?
